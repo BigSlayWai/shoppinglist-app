@@ -17,13 +17,15 @@ import {
 } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_AUTH_DOMAIN",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_STORAGE_BUCKET",
-  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-  appId: "YOUR_APP_ID"
-};
+    apiKey: "AIzaSyAhuUmknCme9dTA44d-jw93NHs16bQrnUk",
+    authDomain: "shopping-list-app-459315.firebaseapp.com",
+    projectId: "shopping-list-app-459315",
+    storageBucket: "shopping-list-app-459315.firebasestorage.app",
+    messagingSenderId: "744209796510",
+    appId: "1:744209796510:web:ca0c5894beef7159c99a8f",
+    measurementId: "G-R6WG0K7WN6"
+  };
+
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
@@ -42,6 +44,26 @@ const signInWithGoogle = async () => {
   }
 };
 
+const signUpWithEmail = async (email, password) => {
+    try {
+      const res = await createUserWithEmailAndPassword(auth, email, password);
+      return res.user;
+    } catch (err) {
+      console.error(err);
+      throw err;
+    }
+  };
+  
+  const logInWithEmail = async (email, password) => {
+    try {
+      const res = await signInWithEmailAndPassword(auth, email, password);
+      return res.user;
+    } catch (err) {
+      console.error(err);
+      throw err;
+    }
+}
+
 const logout = () => {
   signOut(auth);
 };
@@ -50,6 +72,8 @@ export {
   auth,
   db,
   signInWithGoogle,
+  signUpWithEmail,
+  logInWithEmail,
   logout,
   collection,
   addDoc,

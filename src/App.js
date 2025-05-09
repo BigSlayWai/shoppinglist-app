@@ -1,28 +1,44 @@
 import React, { useState, useEffect } from 'react';
 import { auth } from './firebase';
-import Auth from './components/Auth';
-import ShoppingList from './components/shoppingList';
-import { Container, CssBaseline, Box } from '@mui/material';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import HomePage from './pages/HomePage';
+import LoginPage from './pages/LoginPage';
+import SignupPage from './pages/SignUpPage';
 
 function App() {
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       setUser(user);
+      setLoading(false);
     });
 
     return unsubscribe;
   }, []);
 
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
   return (
-    <Container component="main" maxWidth="sm">
-      <CssBaseline />
-      <Box sx={{ mt: 4, mb: 4 }}>
-        <Auth user={user} />
-        {user && <ShoppingList user={user} />}
-      </Box>
-    </Container>
+    <Router>
+      <Routes>
+        <Route 
+          path="/" 
+          element={user ? <HomePage /> : <Navigate to="/login" />} 
+        />
+        <Route 
+          path="/login" 
+          element={!user ? <LoginPage /> : <Navigate to="/" />} 
+        />
+        <Route 
+          path="/signup" 
+          element={!user ? <SignupPage /> : <Navigate to="/" />} 
+        />
+      </Routes>
+    </Router>
   );
 }
 
